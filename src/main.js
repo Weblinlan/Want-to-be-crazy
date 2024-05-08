@@ -13,12 +13,17 @@ import Antd from "ant-design-vue";
 import 'element-ui/lib/theme-chalk/index.css';
 import router from './router'
 import './style.css'
+
 // * 轮播导入
-import { Swipe, SwipeItem, Image } from "vant";
+import { Swipe, SwipeItem, Image,Icon  } from "vant";
 // * 引入组件样式
 import "vant/lib/index.css";
 
+
+import 'ant-design-vue/dist/reset.css';
+
+const app = createApp(App);
 // Vue.use(Antd);
 // Vue.component("Icon", Icon);        
 
-createApp(App).use(router).use(Swipe).use(SwipeItem).use(Image).mount('#app')
+createApp(App).use(router).use(Antd).use(Swipe).use(SwipeItem).use(Image).use(Icon).mount('#app')
