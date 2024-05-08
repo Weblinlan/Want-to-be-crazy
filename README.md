@@ -1,75 +1,137 @@
-// vue3 api模块化 （需要什么功能，就导入什么模块）
-// vue2中对vue库是全量引用 不能做到按需引用
-// vue3几乎兼容所有的vue2语法 平滑的过渡
-// vue3推荐组合式API
-// vue3干掉了一些
 
-// Vue中组件的配置项：
-// 选项式API（vue3兼容）
-// 组合式API(vue3推荐)
+// vue3 api 模块化
+// vue2 中对 vue 库是全量引用 不能做到按需引用
+// vue3 几乎兼容所有的 vue2 语法 平滑的过渡
+// vue3 推荐组合式 API
+// vue3 干掉了
+// vue2 中组件的配置项：
+// 选项式 API（vue3 兼容）
+// 组合式 API（vue3 推荐）
+/\*\*
 
-1、使用createApp(根组件) 来创建根组件
-2、setup = beforeCreate + created
-3、setup是vue3 api(和vue2选项配置等价的api)的入口
-4、setup函数返回的对象中的属性才能被模板使用
-5、使用ref定义响应式数据 ref定义的数据都需要使用.value取值 (使用在模板语法{{}}的数据除外)
-6、使用reactive定义响应式数据  不能用于基本数据类型的响应式数据的定义！！！禁止对其解构！（会失去响应式）
-7、ref是reactive的语法糖！！(ref就是基于reactive实现的)
+- name
+- data
+- methods
+- computed
+- watch
+- components
+- mixins
+- beforeCreate
+- created
+- beforeMount
+- mounted
+- beforeUpdate
+- updated
+- beforeDestroy
+- destoryed
+- ...
+  \*/
+
+1. 使用 createApp(根组件) 创建根组件
+2. setup === beforeCreaete + created
+3. setup 是 vue3 API（和 vue2 选项配置等价的 api） 的入口
+4. setup 函数返回的对象中的属性才能被模板使用！！！
+5. 使用 ref 定义响应式数据 ref 定义的数据都需要使用.value 取值（模板语法除外）
+6. 使用 reactive 定义响应式数据 ！！！不能用于基本数据类型的响应式数据的定义！！！禁止对其解构！！！
+7. ref 是 reactive 的语法糖！！！（ref 就是基于 reactive 实现的）
+
 ```js
-const {reactive} from 'vue';
-const $ref = (initValue)=>reactive({value:initValue});
+import { reactive } from "vue";
+const $ref = (initValue) => reactive({ value: initValue });
 
+const count = $ref(1);
+console.log(count.value);
 ```
-<!-- ref是基于reactive封装的 -->
-8、ref用于任意数据类型 reactive仅用于对象
-9、toRef:将reactive定义的响应式数据的某个属性转换为某个ref响应式数据
-10、toRefs：批量转换
 
-// vue3:  createApp setup ref reactive toRef toRefs
-// vue-router4: createRouter createWebHistory
+8. ref 可以获取 DOM 节点/组件
+9. ref 用于任意数据类型 reactive 仅用于对象
+10. toRef: 将 reactive 定义的响应式数据的某个属性转换为某个 ref 响应式数据
+11. toRefs：批量转换 解构保持响应式
+12. onMounted 相当于 vue2 中的 mounted 生命周期
+13. 通过 createApp().component(组件名， 组件配置) 注册全局组件
+14. setup 函数的第一参数是组件的 props 属性 （获取组件 props 属性值是最频繁操作）
+15. setup 函数的第二参数是组件的 attrs、emit、slots、expose 的集合构成 context 对象
+16. context.attrs => this.$attrs (属性)
+17. context.emit => this.$emit （函数）
+18. context.slots => this.$slots （属性）
+19. context.expose 对外暴露组件的数据
+20. 在 vue3 组件中 只有通过 emits 选项配置的事件名才被认定为自定义事件
+21. v-model 在 vue3 中的变化 v-model:key 可以传递参数了 （vue2 中一个组件只能有一个 v-model）
+22. v-model 更新绑定的值的自定义事件发生了变化 update:key
 
+```jsx
+  /* vue2 */
+  <MyComponent v-model="v1"/>
+  <MyComponent :value="v1" @input="(e) => v1=e.target.value"/>
+  /* vue3 */
+  <MyComponent v-model:value="v1" v-model:index="v2"/>
+  <MyComponent :value="v1" @update:value="(e) => v1=e.target.value"
+               :index="v2" @update:index="(e) => v2=e.target.value" />
+  /* v-model:属性名="属性值"
+   :属性名="属性值" @update:属性名 ="(e) => 属性值 = e " */
+```
 
-// Vue中组件的配置项：
-// 选项式API（vue3兼容）
-// 组合式API(vue3推荐)
-import { ref, reactive ,toRef,toRefs} from "vue";
+23. 使用 compute API 来定义计算属性
+
+```js
+import { ref, computed } from "vue";
 export default {
   setup() {
-    // console.log("setup");
-    // const msg = ref("abc");
-    // const fn = () => console.log(msg.value);
-    const count = ref(0);
-    // onMounted(() => console.log(count.value));
-    const increateCount = () => count.value++;
-    const decreaseCount = () => count.value--;
-
-    // 定义一个用户
-    const user = reactive({ name: "ttt", age: 23 });
-    const updateUserAge = () => user.age++;
-    // const name = toRef(user,"name");
-    // const age = toRef(user,"age");
-    // 对reactive响应式数据直接解构会失去响应式  解决办法借助toRefs
-    const {name,age} = toRefs(user);
-
-    // reactive用基本数据类型的数据初始化 X报错
-    const index = reactive(123);
-    const increateIndex = () => index++;
-
-    // reactive用数组初始化
-    const list = reactive([1, 2, 3, 4]);
-    const pushRandomItem = () => list.push(5);
-
-    return {
-      increateCount,
-      decreaseCount,
-      count,
-      user,
-      index,
-      increateIndex,
-      updateUserAge,
-      pushRandomItem,
-      list,
-      name,
-    };
+    const a = ref(1);
+    const b = ref(2);
+    // 定义计算属性 求a和b的和
+    const sum = computed(() => a.value + b.value);
+    const sum = computed({
+      get: () => a.value + b.value,
+    });
+    const sum = computed({
+      get: () => a.value + b.value,
+      set: (value) => a.value = b.value = value/2;
+    });
   },
 };
+```
+
+24. watch/watchEffect 是一个组合式 API 需要按需引入然后使用
+25. watch 监听 ref 数据 watch([ref1, ref2...], () => {})
+26. 如何取消 watch 的监听： watch 的返回值就是一个取消当前监听的函数 执行该函数就可以取消监听
+27. watch 的第三个参数对象是可选的 immediate: true(初始化执行一次) deep: true 对于多层级嵌套数据使用
+
+```js
+import { ref, watch } from "vue";
+export default {
+  setup() {
+    const a = ref(1);
+    const b = ref(2);
+    // 监听单个ref
+    watch(a, () => console.log("a changed"));
+    watch(b, () => console.log("b changed"));
+    watch(
+      () => a.value,
+      () => console.log("a changed")
+    );
+    watch(
+      () => b.value,
+      () => console.log("b changed")
+    );
+    watch([a], () => console.log("a changed"));
+    watch([() => b.value], () => console.log("b changed"));
+    const stopWatchCount = watch(
+      [count],
+      () => {
+        console.log("count changed!!");
+      },
+      {
+        // 该watch的毁掉函数初始化执行一次
+        immediate: true,
+        // 深度监听
+        deep: true,
+      }
+    );
+  },
+};
+```
+
+28. watchEffect 99% 除了（第一次不执行、获取监听数据改变前的值）使用 watch
+
+29. nextTick 是一个组合式 API 需要按需引入然后使用
