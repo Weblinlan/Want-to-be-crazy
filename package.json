@@ -1,5 +1,5 @@
 {
-  "name": "demo",
+  "name": "code",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,14 +9,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@better-scroll/core": "^2.5.1",
+    "ant-design-vue": "^4.2.1",
     "axios": "^1.6.8",
+    "better-scroll": "^2.5.1",
+    "element-ui": "^2.15.14",
     "vant": "^4.9.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
     "vite": "^5.2.0"
   }
 }
