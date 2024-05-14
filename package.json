@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
+    "@vueuse/core": "^10.9.0",
     "ant-design-vue": "^4.2.1",
     "axios": "^1.6.8",
     "better-scroll": "^2.5.1",

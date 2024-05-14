@@ -135,3 +135,13 @@ export default {
 28. watchEffect 99% 除了（第一次不执行、获取监听数据改变前的值）使用 watch
 
 29. nextTick 是一个组合式 API 需要按需引入然后使用
+
+30. Vue.use() => app.use() this 的指向只在函数调用的时候才能确定
+31. .sync 修饰符 弃用 如何兼容 v-model
+32. transition => Transition 有什么变化
+33. Teleport 新的内置组件如何使用
+34. Suspense 组件有什么作用 （等待组件异步资源准备完成后渲染组件 异步加载过程中我们可以定义加载 loading）
+  1.  Suspense 提供俩插槽 
+  2. default（渲染具有异步依赖[`async setup(){}`]组件）
+  3. fallback 在异步任务执行期间 （pending -> reslove）渲染的内容 一般用来渲染 loading
+35. 组合函数: 开发者将 vue3 的 API 重新组合形成一个新具有某种功能的 API，从而形成逻辑复用！

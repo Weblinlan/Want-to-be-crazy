@@ -1720,14 +1720,15 @@
 					</div>
 				</div>
 			</a-drawer>
-			<div class="relative">
-				<label for="">
+			<div class="relative" >
+				<label 	@cilck="handleClick" for="">
 					<input
 							type="text"
 							placeholder="Love Is Gone (Acoustic)"
 							class="dark:from-[#34304b] dark:to-[#403246] dark:border-0 text-[4.47vw] pl-[8vw] bg-gradient-to-r from-[#d9ddfd] text-[#8189A1] to-[#f3d9ef] opacity-0.2 w-[75vw] h-[10vw] border-2 border-[#CCCEF7] rounded-[25px]"
+
 					/>
-				</label>
+				</label >
 				<svg
 						xmlns="http://www.w3.org/2000/svg"
 						xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -4233,35 +4234,42 @@
 		</div>
 	</template>
 	<script>
-		import { ref } from 'vue';
-		import { getHomePageData, getDragonball } from '../service';
-		import BetterScroll from '../components/BetterScroll.vue';
+	import { ref } from 'vue';
+	import { useRouter } from 'vue-router';
+	import { getHomePageData, getDragonball } from '../service';
+	import BetterScroll from '../components/BetterScroll.vue';
 
-		export default {
-			components: { BetterScroll },
-			setup() {
-				const open = ref(false);
-				const afterOpenChange = bool => {
-					console.log('open', bool);
-				};
-				const showDrawer = () => {
-					open.value = true;
-				};
-				const homepageData = ref({});
-				const homepageDragonball = ref([]);
-				(async () => {
-					try {
-						homepageData.value = (await getHomePageData()).data.data.blocks;
-						homepageDragonball.value = (await getDragonball()).data.data;
-						console.log(homepageData.value);
-						console.log(homepageDragonball.value);
-					} catch (error) {
-						console.log(error);
-					}
-				})();
-				return { homepageData, homepageDragonball,open,showDrawer,afterOpenChange };
-			},
-		};
+	export default {
+		components: { BetterScroll },
+		setup() {
+			const router = useRouter();
+			const handleClick = () => {
+				// 跳转到指定的路由
+				router.push('/Search');
+			};
+			const open = ref(false);
+			const afterOpenChange = bool => {
+				console.log('open', bool);
+			};
+			const showDrawer = () => {
+				open.value = true;
+			};
+			const homepageData = ref({});
+			const homepageDragonball = ref([]);
+			(async () => {
+				try {
+					homepageData.value = (await getHomePageData()).data.data.blocks;
+					homepageDragonball.value = (await getDragonball()).data.data;
+					console.log(homepageData.value);
+					console.log(homepageDragonball.value);
+				} catch (error) {
+					console.log(error);
+				}
+			})();
+			return { homepageData, homepageDragonball,open,showDrawer,afterOpenChange,handleClick,router};
+		},
+	};
 	</script>
-	<style></style>
+	<style>
+	</style>
 
