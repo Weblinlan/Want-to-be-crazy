@@ -4238,7 +4238,6 @@
 	import { useRouter } from 'vue-router';
 	import { getHomePageData, getDragonball } from '../service';
 	import BetterScroll from '../components/BetterScroll.vue';
-
 	export default {
 		components: { BetterScroll },
 		setup() {
